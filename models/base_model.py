@@ -6,11 +6,18 @@ from datetime import datetime
 class BaseModel():
     """A class that defines all common attributes/methods for other classes"""
 
-    def __init__(self):
+    def __init__(self, *args, **kwargs):
         """Constructor"""
-        self.id = str(uuid.uuid4())
-        self.created_at = datetime.now()
-        self.updated_at = self.created_at
+        if not args and not kwargs:
+            self.id = str(uuid.uuid4())
+            self.created_at = datetime.now()
+            self.updated_at = self.created_at
+        else:
+            for key, value in kwargs.items():
+                if key != "__class__":
+                    if key == "created_at" or key == "updated_at":
+                        value = datetime.strptime(value, "%Y-%m-%dT%H:%M:%S.%f")
+                    setattr(self, key ,value)
     
     def __setattr__(self, name, value):
         """set attribute magic method"""
