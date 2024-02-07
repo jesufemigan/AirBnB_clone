@@ -9,6 +9,7 @@ from models import storage
 
 class_names = ['BaseModel']
 
+
 class HBNBCommand(cmd.Cmd):
     """A console for HBNB"""
     prompt = "(hbnb) "
@@ -24,7 +25,7 @@ class HBNBCommand(cmd.Cmd):
         """
         if not line:
             print(self.missing_class)
-        elif not line in class_names:
+        elif line not in class_names:
             print(self.not_exist_class)
         else:
             new_cls = globals()[line]()
@@ -37,12 +38,13 @@ class HBNBCommand(cmd.Cmd):
         Ex. show BaseModel 123-123
         """
         all_objects = storage.all()
+
         def find_obj():
             for key, value in all_objects.items():
                 for i, j in value.items():
                     if value['id'] == line.split()[1]:
                         return value
-        
+
         if not line:
             print(self.missing_class)
         elif not line.split()[0] in class_names:
@@ -50,7 +52,8 @@ class HBNBCommand(cmd.Cmd):
         elif len(line.split()) < 2:
             print(self.missing_id)
         elif line.split()[1]:
-            print(find_obj() if find_obj() else self.instance_not_found)
+            print(str(BaseModel(**find_obj()) if find_obj() else
+                  self.instance_not_found))
 
     def emptyline(self):
         """do nothing for empty line"""
