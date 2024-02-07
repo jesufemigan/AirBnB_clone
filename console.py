@@ -75,6 +75,21 @@ class HBNBCommand(cmd.Cmd):
                         json.dump(all_objects, f)
                     return
             print(self.instance_not_found)
+    
+    def do_all(self, line):
+        """Prints all the string representation of all instances based
+        or not on the classname.
+        Usage: all <classname>.
+        E.g all BaseModel or all.
+        """
+        if line:
+            if line not in class_names:
+                print(self.missing_class)
+            else:
+                all_objects = storage.all()
+                for key, value in all_objects.items():
+                    print(str(BaseModel(**value)))
+
 
 
     def emptyline(self):
