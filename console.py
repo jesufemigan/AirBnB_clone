@@ -3,6 +3,7 @@
 
 
 import cmd
+import json
 from models.base_model import BaseModel
 from models import storage
 
@@ -41,7 +42,6 @@ class HBNBCommand(cmd.Cmd):
 
         def find_obj():
             for key, value in all_objects.items():
-                for i, j in value.items():
                     if value['id'] == line.split()[1]:
                         return value
 
@@ -54,6 +54,28 @@ class HBNBCommand(cmd.Cmd):
         elif line.split()[1]:
             print(str(BaseModel(**find_obj()) if find_obj() else
                   self.instance_not_found))
+    
+    def do_destroy(self, line):
+        """Deletes an instance based on the class name and id.
+        Usage: destroy <classname> <id>.
+        E.g destroy BaseModel 123-1233
+        """
+        if not line:
+            print(self.missing_class)
+        elif not line.split()[0] in class_names:
+            print(self.not_exist_class)
+        elif len(line.split()) < 2:
+            print(self.missing_id)
+        elif line.split()[1]:
+            all_objects = storage.all()
+            for key, value in all_objects.items():
+                if value['id'] == line.split()[1]:
+                    del all_objects[key]
+                    with open("file.json", "w", encoding="utf-8") as f:
+                        json.dump(all_objects, f)
+                    return
+            print(self.instance_not_found)
+
 
     def emptyline(self):
         """do nothing for empty line"""
