@@ -4,14 +4,21 @@
 
 import cmd
 import json
-from models.base_model import BaseModel
-from models.user import User
-
+import os
+import inspect
+import importlib
 from models import storage
 
-
-class_names = ['BaseModel', 'User']
-
+models_path = os.path.join(os.path.dirname(__file__), 'models')
+class_objects = {}
+for file_name in os.listdir(models_path):
+    # module = importlib.import_module(f"models.{module_name}")
+    if file_name.endswith('.py') and file_name != '__init__.py':
+        module_name = file_name[:-3]
+        module = importlib.import_module(f"models.{module_name}")
+        members = inspect.getmembers(module, inspect.isclass)
+        class_objects.update({name: obj for name, obj in members})
+    
 
 class HBNBCommand(cmd.Cmd):
     """A console for HBNB"""
@@ -28,10 +35,11 @@ class HBNBCommand(cmd.Cmd):
         """
         if not line:
             print(self.missing_class)
-        elif line not in class_names:
+        elif line not in class_objects.keys():
+            print(class_objects)
             print(self.not_exist_class)
         else:
-            new_cls = globals()[line]()
+            new_cls = class_objects[line]()
             new_cls.save()
             print(new_cls.id)
 
@@ -52,12 +60,12 @@ class HBNBCommand(cmd.Cmd):
 
         if not line:
             print(self.missing_class)
-        elif not line_split[0] in class_names:
+        elif not line_split[0] in class_objects.keys():
             print(self.not_exist_class)
         elif len(line.split()) < 2:
             print(self.missing_id)
         elif line_split[1]:
-            print(str(globals()[line_split[0]](**find_obj()) if find_obj() else
+            print(str(class_objects[line_split[0]](**find_obj()) if find_obj() else
                   self.instance_not_found))
             
 
@@ -69,7 +77,7 @@ class HBNBCommand(cmd.Cmd):
         line_split = line.split()
         if not line:
             print(self.missing_class)
-        elif not line_split[0] in class_names:
+        elif not line_split[0] in class_objects.keys():
             print(self.not_exist_class)
         elif not line_split[1]:
             print(self.missing_id)
@@ -92,14 +100,14 @@ class HBNBCommand(cmd.Cmd):
         """
         all_instance = []
         if line:
-            if line not in class_names:
+            if line not in class_objects.keys():
                 print(self.missing_class)
             else:
                 storage.reload()
                 all_objects = storage.all()
                 for value in all_objects.values():
                     if line == value["__class__"]:
-                        all_instance.append(str(globals()[value["__class__"]](**value)))
+                        all_instance.append(str(class_objects[value["__class__"]](**value)))
                 print(all_instance)
 
     def do_update(self, line):
@@ -113,7 +121,7 @@ class HBNBCommand(cmd.Cmd):
         line_split = line.split()
         if not line:
             print(self.missing_class)
-        elif line_split[0] not in class_names:
+        elif line_split[0] not in class_objects.keys():
             print(self.not_exist_class)
         elif len(line_split) < 2:
             print(self.missing_id)
