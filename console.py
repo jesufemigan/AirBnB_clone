@@ -89,9 +89,36 @@ class HBNBCommand(cmd.Cmd):
                 all_objects = storage.all()
                 for key, value in all_objects.items():
                     print(str(BaseModel(**value)))
-
-
-
+                    
+    def do_update(self, line):
+        """Updates an instance based on the class name aand id by adding
+        or updating attribute.
+        Usage: update <classname> <id> <attribute name> "<attribute value>"
+        E.g update BaseModel 123-123 name email "airbnb@mail.com"
+        """
+        all_objects = storage.all()
+        line_split = line.split()
+        if not line:
+            print(self.missing_class)
+        elif line_split[0] not in class_names:
+            print(self.not_exist_class)
+        elif len(line_split) < 2:
+            print(self.missing_id)
+        elif line_split[1]:
+            for key, value in all_objects.items():
+                if value['id'] == line.split()[1]:
+                    if len(line_split) >= 3 and line.split()[2]:
+                        if len(line_split) >= 4 and line.split()[3]:
+                            value.update({line.split()[2]: line.split()[3]})
+                            with open("file.json", "w", encoding="utf-8") as f:
+                                json.dump(all_objects, f)
+                        else:
+                            print("** value missing **")
+                    else:
+                        print("** attribute name missing **")
+                    return
+            print(self.instance_not_found)
+    
     def emptyline(self):
         """do nothing for empty line"""
         pass
