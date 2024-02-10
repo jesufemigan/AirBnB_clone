@@ -9,6 +9,7 @@ from datetime import datetime
 class FileStorage():
     """A class that serializes instances to a JSON file and deserializes
     JSON file to instances"""
+
     def __init__(self):
         """Constructor"""
         self.__file_path = "file.json"

@@ -8,7 +8,7 @@ class City(BaseModel):
     """A class for City"""
     state_id = ""
     name = ""
-    
+
     def __init__(self, *args, **kwargs):
         """Constructor"""
         super().__init__(*args, **kwargs)
