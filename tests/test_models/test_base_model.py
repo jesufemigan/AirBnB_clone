@@ -49,8 +49,8 @@ class TestBaseModel(unittest.TestCase):
         """Test that class is intialized with no args"""
         with self.assertRaises(TypeError) as e:
             BaseModel.__init__()
-            msg = "__init__() is missing 1 required postional argument: 'self'"
-            self.assertEqual(str(e.exception), msg)
+        msg = "BaseModel.__init__() missing 1 required positional argument: 'self'"
+        self.assertEqual(str(e.exception), msg)
 
     def test_3_id_is_unique(self):
         """Test that id is unique"""
