@@ -4,6 +4,7 @@
 
 from json import dump, load
 
+
 class FileStorage():
     """A class that serializes instances to a JSON file and deserializes
     JSON file to instances"""
