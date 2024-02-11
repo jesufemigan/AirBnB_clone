@@ -100,14 +100,18 @@ class HBNBCommand(cmd.Cmd):
         storage.reload()
         all_objects = storage.all()
 
-        if len(arg) == 0:
+        if len(line_split) == 0:
             print(self.missing_class)
         elif not line_split[0] in class_objects.keys():
             print(self.not_exist_class)
-        elif len(arg) < 2:
+        elif len(line_split) < 2:
             print(self.missing_id)
         elif line_split[1]:
-            print(all_objects[f"{line_split[0]}.{line_split[1]}"])
+            key = f"{line_split[0]}.{line_split[1]}"
+            if not key in all_objects.keys():
+                print(self.instance_not_found)
+                return
+            print(all_objects[key])
 
     def do_destroy(self, arg):
         """Deletes an instance based on the class name and id.
@@ -141,7 +145,7 @@ class HBNBCommand(cmd.Cmd):
         all_instance = []
 
         if len(line) > 0 and line[0] not in class_objects.keys():
-            print(self.missing_class)
+            print(self.not_exist_class)
         else:
             storage.reload()
             all_objects = storage.all()
