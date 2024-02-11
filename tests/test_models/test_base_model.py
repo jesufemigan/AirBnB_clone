@@ -116,11 +116,10 @@ class TestBaseModel(unittest.TestCase):
     #     """Test the save method"""
     #     b = BaseModel()
     #     b.save()
-    #     file_storage_instance = FileStorage()
     #     dict_key = f"{b.__class__.__name__}.{b.id}"
     #     my_dict = {dict_key: b.to_dict()}
-    #     self.assertTrue(os.path.isfile(file_storage_instance._FileStorage__file_path))
-    #     with open(file_storage_instance._FileStorage__file_path, "r",
+    #     self.assertTrue(os.path.isfile(FileStorage._FileStorage__file_path))
+    #     with open(FileStorage._FileStorage__file_path, "r",
     #               encoding="utf-8") as f:
     #         self.assertEqual(len(f.read()), len(json.dumps(my_dict)))
     #         f.seek(0)
