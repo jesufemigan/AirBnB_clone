@@ -100,11 +100,6 @@ class HBNBCommand(cmd.Cmd):
         storage.reload()
         all_objects = storage.all()
 
-        def find_obj():
-            for value in all_objects.values():
-                if value['id'] == line_split[1]:
-                    return value
-
         if len(arg) == 0:
             print(self.missing_class)
         elif not line_split[0] in class_objects.keys():
@@ -112,8 +107,7 @@ class HBNBCommand(cmd.Cmd):
         elif len(arg) < 2:
             print(self.missing_id)
         elif line_split[1]:
-            print(str(class_objects[line_split[0]](**find_obj()) if find_obj()
-                      else self.instance_not_found))
+            print(all_objects[f"{line_split[0]}.{line_split[1]}"])
 
     def do_destroy(self, arg):
         """Deletes an instance based on the class name and id.
@@ -130,13 +124,12 @@ class HBNBCommand(cmd.Cmd):
         elif line_split[1]:
             storage.reload()
             all_objects = storage.all()
-            for key, value in all_objects.items():
-                if value['id'] == line_split[1] \
-                   and key.split('.')[0] == line_split[0]:
-                    del all_objects[key]
-                    storage.save()
-                    return
-            print(self.instance_not_found)
+            key = f"{line_split[0]}.{line_split[1]}"
+            if key not in all_objects.keys():
+                print(self.instance_not_found)
+                return
+            del all_objects[f"{line_split[0]}.{line_split[1]}"]
+            storage.save()
 
     def do_all(self, arg):
         """Prints all the string representation of all instances based
@@ -146,17 +139,18 @@ class HBNBCommand(cmd.Cmd):
         """
         line = parse(arg)
         all_instance = []
-        if line:
-            if line[0] not in class_objects.keys():
-                print(self.missing_class)
-            else:
-                storage.reload()
-                all_objects = storage.all()
-                for value in all_objects.values():
-                    if line[0] == value["__class__"]:
-                        all_instance.append(
-                            str(class_objects[value["__class__"]](**value)))
-                print(all_instance)
+
+        if len(line) > 0 and line[0] not in class_objects.keys():
+            print(self.missing_class)
+        else:
+            storage.reload()
+            all_objects = storage.all()
+            for value in all_objects.values():
+                if len(line) > 0 and line[0] == value.__class__.__name__:
+                    all_instance.append(str(value))
+                elif len(line) == 0:
+                    all_instance.append(str(value))
+            print(all_instance)
 
     def do_update(self, arg):
         """Updates an instance based on the class name aand id by adding
@@ -189,18 +183,18 @@ class HBNBCommand(cmd.Cmd):
                 print("** value missing **")
                 return
         if len(line_split) == 4:
-            for value in all_objects.values():
-                if value['id'] == line_split[1]:
-                    value.update({line_split[2]: line_split[3]})
-                    storage.save()
-                    return
+            obj = all_objects[f"{line_split[0]}.{line_split[1]}"]
+            if line_split[1] == obj.__dict__['id']:
+                obj.__dict__.update({line_split[2]: line_split[3]})
+                storage.save()
+                return
         elif type(eval(line_split[2])) == dict:
-            for value in all_objects.values():
-                if value['id'] == line_split[1]:
-                    for k, v in eval(line_split[2]).items():
-                        value.update({k: v})
-                    storage.save()
-                    return
+            obj = all_objects[f"{line_split[0]}.{line_split[1]}"]
+            if line_split[1] == obj.__dict__['id']:
+                for k, v in eval(line_split[2]).items():
+                    obj.__dict__.update({k: v})
+                storage.save()
+                return
         print(self.instance_not_found)
 
     def do_count(self, arg):
