@@ -140,6 +140,5 @@ class TestBaseModel(unittest.TestCase):
             "but 2 were given"
         self.assertEqual(str(e.exception), msg)
 
-
-if __name__ == "__main__":
-    unittest.main()
+    if __name__ == "__main__":
+        unittest.main()

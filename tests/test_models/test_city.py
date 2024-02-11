@@ -1,4 +1,4 @@
-#!/usr.bin/python3
+#!/usr/bin/python3
 """A python module for testing City"""
 
 import unittest
@@ -42,6 +42,5 @@ class TestUser(unittest.TestCase):
         self.assertEqual(u.age, my_dict["age"])
         self.assertEqual(u.race, my_dict['race'])
 
-
-if __name__ == "__main__":
-    unittest.main()
+    if __name__ == "__main__":
+        unittest.main()
