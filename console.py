@@ -50,7 +50,7 @@ def parse(line):
 class HBNBCommand(cmd.Cmd):
     """A console for HBNB"""
     prompt = "(hbnb) "
-    missing_class = "** class name is missing **"
+    missing_class = "** class name missing **"
     not_exist_class = "** class doesn't exist **"
     missing_id = "** instance id missing **"
     instance_not_found = "** no instance found **"
@@ -122,10 +122,16 @@ class HBNBCommand(cmd.Cmd):
         line_split = parse(arg)
         if len(arg) == 0:
             print(self.missing_class)
+            return
         elif not line_split[0] in class_objects.keys():
             print(self.not_exist_class)
+            return
+        elif len(line_split) < 2:
+            print(self.missing_id)
+            return
         elif not line_split[1]:
             print(self.missing_id)
+            return
         elif line_split[1]:
             storage.reload()
             all_objects = storage.all()
