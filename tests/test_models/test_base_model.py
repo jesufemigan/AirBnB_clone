@@ -49,7 +49,7 @@ class TestBaseModel(unittest.TestCase):
         """Test that class is intialized with no args"""
         with self.assertRaises(TypeError) as e:
             BaseModel.__init__()
-        msg = "BaseModel.__init__() missing 1 required positional argument: 'self'"
+        msg = "__init__() missing 1 required positional argument: 'self'"
         self.assertEqual(str(e.exception), msg)
 
     def test_3_id_is_unique(self):
@@ -100,7 +100,7 @@ class TestBaseModel(unittest.TestCase):
         """Initialize to_dict method with no args"""
         with self.assertRaises(TypeError) as e:
             BaseModel.to_dict()
-        msg = "BaseModel.to_dict() missing 1 required "\
+        msg = "to_dict() missing 1 required "\
             "positional argument: 'self'"
         self.assertEqual(str(e.exception), msg)
 
@@ -108,7 +108,7 @@ class TestBaseModel(unittest.TestCase):
         """Initialize to_dict method with excess args"""
         with self.assertRaises(TypeError) as e:
             BaseModel.to_dict(self, 12)
-        msg = "BaseModel.to_dict() takes 1 positional argument "\
+        msg = "to_dict() takes 1 positional argument "\
             "but 2 were given"
         self.assertEqual(str(e.exception), msg)
 
@@ -129,14 +129,14 @@ class TestBaseModel(unittest.TestCase):
         """Test the save method with no args"""
         with self.assertRaises(TypeError) as e:
             BaseModel.save()
-        msg = "BaseModel.save() missing 1 required positional argument: 'self'"
+        msg = "save() missing 1 required positional argument: 'self'"
         self.assertEqual(str(e.exception), msg)
 
     def test_7_save_method_init_excess_args(self):
         """Test the save method with excess arguments"""
         with self.assertRaises(TypeError) as e:
             BaseModel.save(self, 8)
-        msg = "BaseModel.save() takes 1 positional argument "\
+        msg = "save() takes 1 positional argument "\
             "but 2 were given"
         self.assertEqual(str(e.exception), msg)
 

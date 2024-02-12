@@ -25,7 +25,7 @@ class TestUser(unittest.TestCase):
         "Tests if Amenity instatiate wiht no arg"
         with self.assertRaises(TypeError) as e:
             Amenity.__init__()
-        msg = "Amenity.__init__() missing 1 required positional argument: 'self'"
+        msg = "__init__() missing 1 required positional argument: 'self'"
         self.assertEqual(str(e.exception), msg)
 
     def test_1_instantiation_with_custom_arg(self):
