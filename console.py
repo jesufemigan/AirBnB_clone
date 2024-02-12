@@ -12,6 +12,7 @@ from models import storage
 
 
 def import_classes():
+    """Import all classes"""
     models_path = os.path.join(os.path.dirname(__file__), 'models')
     class_objects = {}
     for file_name in os.listdir(models_path):
@@ -108,7 +109,7 @@ class HBNBCommand(cmd.Cmd):
             print(self.missing_id)
         elif line_split[1]:
             key = f"{line_split[0]}.{line_split[1]}"
-            if not key in all_objects.keys():
+            if key not in all_objects.keys():
                 print(self.instance_not_found)
                 return
             print(all_objects[key])
