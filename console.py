@@ -8,11 +8,7 @@ import re
 from shlex import split
 import inspect
 import importlib
-try:
-    from models import storage
-except ImportError:
-    import sys
-    storage = sys.modules[__package__ + '.storage']
+from models import storage
 
 
 def import_classes():
