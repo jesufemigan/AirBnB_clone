@@ -3,6 +3,7 @@
 
 
 from json import dump, load
+import os, inspect, importlib
 
 
 class FileStorage():
@@ -29,8 +30,19 @@ class FileStorage():
 
     def reload(self):
         """deserializes the JSON file to objects"""
-
-        import_classes = __import__('console').import_classes
+        # import_classes = __import__('console').import_classes
+        def import_classes():
+            """Import all classes"""
+            # models_path = os.path.join(os.path.dirname(__file__), 'models')
+            models_path = os.chdir('../')
+            class_objects = {}
+            for file_name in os.listdir(models_path):
+                if file_name.endswith('.py') and file_name != '__init__.py':
+                    module_name = file_name[:-3]
+                    module = importlib.import_module(f"models.{module_name}")
+                    members = inspect.getmembers(module, inspect.isclass)
+                    class_objects.update({name: obj for name, obj in members})
+            return class_objects
         all_objects = import_classes()
         from os import path
         if path.exists(FileStorage.__file_path) \
