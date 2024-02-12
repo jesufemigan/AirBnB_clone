@@ -27,16 +27,35 @@ class FileStorage():
             d = {k: v.to_dict() for k, v in FileStorage.__objects.items()}
             dump(d, f)
 
+    def classes(self):
+        """Returns all classes"""
+        from models.base_model import BaseModel
+        from models.amenity import Amenity
+        from models.user import User
+        from models.state import State
+        from models.city import City
+        from models.place import Place
+        from models.review import Review
+
+        classes = {"BaseModel": BaseModel,
+                   "User": User,
+                   "State": State,
+                   "City": City,
+                   "Amenity": Amenity,
+                   "Place": Place,
+                   "Review": Review}
+        return classes
+
     def reload(self):
         """deserializes the JSON file to objects"""
 
-        import_classes = __import__('console').import_classes
-        all_objects = import_classes()
+        # import_classes = __import__('console').import_classes
+        # all_objects = import_classes()
         from os import path
         if path.exists(FileStorage.__file_path) \
                 and path.getsize(FileStorage.__file_path) > 0:
             with open(FileStorage.__file_path, "r", encoding="utf-8") as f:
                 loaded_objects = load(f)
-                loaded_objects = {k: all_objects[v["__class__"]](**v)
+                loaded_objects = {k: self.classes()[v["__class__"]](**v)
                                   for k, v in loaded_objects.items()}
                 FileStorage.__objects = loaded_objects
