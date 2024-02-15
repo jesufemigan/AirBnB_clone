@@ -28,10 +28,11 @@
 .locations, .amenities {
     height: 100%;
     width: 25%;
-    margin-left: 50px;
+    padding-left: 50px;
     display: flex;
     flex-direction: column;
     justify-content: center;
+    position: relative;
 }
 
 .filters div:first-child {
@@ -44,4 +45,49 @@
 .locations h4, .amenities h4 {
     font-weight: 400;
     font-size: 14px;
+}
+
+.popover {
+    position: absolute;
+    top: 70px;
+    left: 0;
+    background-color: #FAFAFA;
+    border: 1px solid #DDDDDD;
+    border-radius: 4px;
+    width: 100%;
+    padding: 50px;
+
+}
+
+.locations .popover {
+    display: flex;
+    flex-direction: column;
+    gap: 20px;
+}
+
+.locations .popover li ul li{
+    padding-left: 20px;
+    margin-top: 5px;
+}
+
+.locations .popover li ul h2 {
+    font-size: 16px;
+}
+
+.amenities .popover {
+    display: flex;
+    flex-direction: column;
+    gap: 5px;
+}
+
+.amenities .popover, .locations .popover {
+    display: none;
+}
+
+li {
+    list-style-type: none;
+}
+
+.locations:hover .popover, .amenities:hover  .popover{
+    display: flex;
 }
